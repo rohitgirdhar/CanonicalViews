@@ -50,7 +50,7 @@ void printVecs(map<int, set<int> > vecs) {
     }
 }
 
-float computeSimilarity(map<int, set<int> > vecs, int i, int j) {
+float computeSimilarity(map<int, set<int> > &vecs, int i, int j) {
     if (vecs.count(i) <= 0 || vecs.count(j) <= 0) {
         return 0.0f;
     }
