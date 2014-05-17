@@ -3,6 +3,7 @@
 #include <set>
 #include <map>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -47,4 +48,26 @@ void printVecs(map<int, set<int> > vecs) {
             cout << " " << *iter2 << endl;
         }
     }
+}
+
+float computeSimilarity(map<int, set<int> > vecs, int i, int j) {
+    if (vecs.count(i) <= 0 || vecs.count(j) <= 0) {
+        return 0.0f;
+    }
+
+    auto iter1 = vecs[i].begin(), iter2 = vecs[j].begin();
+    int count_int = 0;
+    while (iter1 != vecs[i].end() && iter2 != vecs[j].end()) {
+        if (*iter1 == *iter2) {
+            count_int++;
+            iter1++; iter2++;
+        } else if (*iter1 > *iter2) {
+            iter2++;
+        } else {
+            iter1++;
+        }
+    }
+
+    long long denom = vecs[i].size() * 1LL * vecs[j].size();
+    return (count_int * 1.0f / denom);
 }
