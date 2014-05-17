@@ -38,3 +38,13 @@ readImgVecsFromNVM(string fpath) {
     fin.close();
     return res;
 }
+
+void printVecs(map<int, set<int> > vecs) {
+    for (auto iter = vecs.begin(); iter != vecs.end(); ++iter) {
+        cout << "Image ID: " << iter->first << endl;
+        set<int> ftr_pts = iter->second;
+        for (auto iter2 = ftr_pts.begin(); iter2 != ftr_pts.end(); ++iter2) {
+            cout << " " << *iter2 << endl;
+        }
+    }
+}
