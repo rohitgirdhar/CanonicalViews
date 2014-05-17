@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -68,6 +69,6 @@ float computeSimilarity(map<int, set<int> > &vecs, int i, int j) {
         }
     }
 
-    long long denom = vecs[i].size() * 1LL * vecs[j].size();
-    return (count_int * 1.0f / denom);
+    double denom = vecs[i].size() * 1.0f * vecs[j].size();
+    return (count_int * 1.0f / sqrt(denom));
 }
