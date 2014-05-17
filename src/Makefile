@@ -1,11 +1,9 @@
+CXX += -std=c++0x 
 CXXFLAGS += -O2
-LIBS += -L/usr/local/lib
-INC += -I$(BOOST_ROOT)
-LDFLAGS += -lboost_program_options -lboost_filesystem -lboost_system
 
-SRCS=computeSim.cpp
+SRCS=computeSim.cpp selectGreedy.cpp
 OBJS=$(patsubst %.cpp,%.o,$(SRCS))
-EXECS=computeSim
+EXECS=computeSim selectGreedy
 
 all: $(EXECS)
 
@@ -18,10 +16,10 @@ depend: .depend
 include .depend
 
 %: %.o
-	$(LINK.cc) $< -o $@
+	$(LINK.cc) -std=c++0x $< -o $@
 
 %.o: %.cpp
-	$(CXX) -std=c++0x -c $(CXXFLAGS) $(INC) -o $@ $< $(LIBS) $(LDFLAGS)
+	$(CXX) -c $(CXXFLAGS) $(INC) -o $@ $< $(LIBS) $(LDFLAGS)
 
 clean:
 	@- $(RM) $(EXECS)
