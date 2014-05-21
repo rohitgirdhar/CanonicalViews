@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             float sim = computeSimilarity(vecs, i, j);
-            cout << i << " " << j << " " << sim << endl;
+//            cout << i << " " << j << " " << sim << endl;
             fout << sim << " ";
         }
         fout << endl;
