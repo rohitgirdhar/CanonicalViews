@@ -2,14 +2,19 @@
 
 import sys
 import os
-import subprocess
 
 if len(sys.argv) < 4:
     print 'Usage: ./prog <dir> <files list> <output file>'
     sys.exit(-1)
 
 def file_len(fname):
-    return int(subprocess.check_output('wc -l ' + fname + ' | cut -d" " -f1', shell=True))
+    try:
+        with open(fname) as f:
+            for i, l in enumerate(f):
+                pass
+        return i + 1
+    except:
+        return 0
 
 dpath = sys.argv[1]
 fpath = sys.argv[2]
