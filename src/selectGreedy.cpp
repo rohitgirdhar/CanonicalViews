@@ -1,3 +1,7 @@
+/**
+ * Note: The output is 0 indexed
+ */
+
 #include <iostream>
 #include <vector>
 #include <set>
