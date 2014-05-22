@@ -8,12 +8,10 @@
 #include <fstream>
 #include <sstream>
 
-float alpha;
-
 using namespace std;
 
 void help() {
-    cerr << "Usage: ./prog <sim file> <alpha> <output_file>" << endl;
+    cerr << "Usage: ./prog <sim file> <K> <output_file>" << endl;
 }
 
 vector<vector<float> >
@@ -34,18 +32,6 @@ readSimFile(string fname) {
     return res;
 }
 
-float computeQ(set<int> &C, vector<vector<float> > &sim) {
-    float mx_sum = 0;
-    for (int img = 0; img < sim.size(); img++) {
-        float mx = -9999.0f;
-        for (auto iter = C.begin(); iter != C.end(); ++iter) {
-            mx = max(sim[img][*iter], mx);
-        }
-        mx_sum += mx;
-    }
-    return mx_sum - alpha * C.size();
-}
-
 void print_set(set<int> C, string output_file) {
     ofstream fout(output_file.c_str(), ios::out);
     for (auto iter = C.begin(); iter != C.end(); ++iter) {
@@ -54,31 +40,36 @@ void print_set(set<int> C, string output_file) {
     fout.close();
 }
 
-set<int> greedySelect(vector<vector<float> > &sim) {
-    set<int> C; 
-    float Q_v = 0;
-    float cur_Q = 0;
-    float Q_v_max = 0; 
-    int Q_v_max_i = 0;
-    do {
-//        print_set(C);
-        cout << Q_v_max << endl;
-        Q_v_max = -9999.0f;
-        for (int i = 0; i < sim.size(); i++) {
-            if (C.count(i)) continue;
-            set<int> temp = C;
-            temp.insert(i);
-            Q_v = computeQ(temp, sim) - cur_Q;
-            if (Q_v > Q_v_max) {
-                Q_v_max = Q_v;
-                Q_v_max_i = i;
+set<int> greedySelect(vector<vector<float> > &sim, int K) {
+    int N = sim.size();
+    vector<float> cur(N, 0.0f);
+    set<int> C;
+
+    float max_improvement = 0.0f;
+    int max_improv_i = 0;
+    for (int i = 0; i < K; i++) {
+        max_improvement = 0.0f;
+        for (int j = 0; j < N; j++) {
+            if (C.count(j)) continue;
+            float improv = 0;
+            for (int k = 0; k < N; k++) {
+                if (sim[j][k] - cur[k] > 0) {
+                    improv += sim[j][k] - cur[k];
+                }
+            }
+            if (improv > max_improvement) {
+                max_improvement = improv;
+                max_improv_i = j;
             }
         }
-        if (Q_v_max > 0) {
-            cur_Q += Q_v_max;
-            C.insert(Q_v_max_i);
+        if (max_improvement == 0) return C;
+        C.insert(max_improv_i);
+        for (int k = 0; k < N; k++) {
+            cur[k] = max(cur[k], sim[max_improv_i][k]);
         }
-    } while(Q_v_max > 0);
+        cerr << "i = " << i << " Improv: " << max_improvement << endl;
+        cerr << "selected: " << max_improv_i << endl;
+    }
     return C;
 }
 
@@ -88,10 +79,10 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     string simFile = argv[1];
-    alpha = stof(argv[2]);
+    int K = stoi(argv[2]);
     vector<vector<float> > sim = readSimFile(simFile);
     cout << "Read sims file " << endl;
-    set<int> C = greedySelect(sim);
+    set<int> C = greedySelect(sim, K);
     print_set(C, argv[3]);
     return 0;
 }
