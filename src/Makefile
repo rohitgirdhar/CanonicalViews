@@ -1,8 +1,8 @@
 CXX += -std=c++0x 
 CXXFLAGS += -O2
 
-SRCS=computeSim.cpp selectGreedy.cpp computeSimAsInlierCount.cpp
-EXECS=computeSim selectGreedy computeSimAsInlierCount
+SRCS=computeSim.cpp selectGreedy.cpp computeSimAsInlierCount.cpp removeGreedy.cpp
+EXECS=computeSim selectGreedy computeSimAsInlierCount removeGreedy
 
 all: $(EXECS)
 
