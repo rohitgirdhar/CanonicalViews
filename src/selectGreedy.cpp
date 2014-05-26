@@ -7,29 +7,12 @@
 #include <set>
 #include <fstream>
 #include <sstream>
+#include "NVMUtils.hpp"
 
 using namespace std;
 
 void help() {
     cerr << "Usage: ./prog <sim file> <K> <output_file>" << endl;
-}
-
-vector<vector<float> >
-readSimFile(string fname) {
-    vector<vector<float> > res;
-    ifstream fin(fname.c_str());
-    string line;
-    float val;
-    while (getline(fin, line)) {
-        istringstream iss(line);
-        vector<float> row;
-        while (iss >> val) {
-            row.push_back(val);
-        }
-        res.push_back(row);
-    }
-    fin.close();
-    return res;
 }
 
 void print_set(set<int> C, string output_file) {
@@ -65,7 +48,9 @@ set<int> greedySelect(vector<vector<float> > &sim, int K) {
         if (max_improvement == 0) return C;
         C.insert(max_improv_i);
         for (int k = 0; k < N; k++) {
-            cur[k] = max(cur[k], sim[max_improv_i][k]);
+            if (sim[max_improv_i][k] > cur[i]) {
+                cur[k] = sim[max_improv_i][k];
+            }
         }
         cerr << "i = " << i << " Improv: " << max_improvement << endl;
         cerr << "selected: " << max_improv_i << endl;

@@ -72,3 +72,28 @@ float computeSimilarity(map<int, set<int> > &vecs, int i, int j) {
     double denom = vecs[i].size() * 1.0f * vecs[j].size();
     return (count_int * 1.0f / sqrt(denom));
 }
+
+vector<vector<float> >
+readSimFile(string fname) {
+    vector<vector<float> > res;
+    ifstream fin(fname.c_str());
+    string line;
+    float val;
+    while (getline(fin, line)) {
+        istringstream iss(line);
+        vector<float> row;
+        while (iss >> val) {
+            row.push_back(val);
+        }
+        res.push_back(row);
+    }
+    fin.close();
+    // set i,j = j,i
+    for (int i = 0; i < res.size(); i++) {
+        for (int j = 0; j < res[i].size(); j++) {
+            if (i == j) res[i][j] = 0;
+            else res[i][j] = max(res[i][j], res[j][i]);
+        }
+    }
+    return res;
+}

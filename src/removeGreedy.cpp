@@ -8,35 +8,12 @@
 #include <set>
 #include <fstream>
 #include <sstream>
+#include "NVMUtils.hpp"
 
 using namespace std;
 
 void help() {
     cerr << "Usage: ./prog <sim file> <K> <output_file>" << endl;
-}
-
-vector<vector<float> >
-readSimFile(string fname) {
-    vector<vector<float> > res;
-    ifstream fin(fname.c_str());
-    string line;
-    float val;
-    while (getline(fin, line)) {
-        istringstream iss(line);
-        vector<float> row;
-        while (iss >> val) {
-            row.push_back(val);
-        }
-        res.push_back(row);
-    }
-    fin.close();
-    // set i,j = j,i
-    for (int i = 0; i < res.size(); i++) {
-        for (int j = 0; j < res[i].size(); j++) {
-            res[i][j] = max(res[i][j], res[j][i]);
-        }
-    }
-    return res;
 }
 
 void print_set(set<int> C, string output_file) {
@@ -63,7 +40,7 @@ set<int> greedySelect(vector<vector<float> > &sim, int K) {
             for (int k = 0; k < N; k++) {
                 if (k == j) continue;
                 if (is_in_set[k]) { // from the C set itself
-                    improv += sim[j][k];
+        //            improv += sim[j][k];
                 } else {
                     if (sim[j][k] - cur[k] > 0) {
                         improv += sim[j][k] - cur[k];
@@ -78,7 +55,7 @@ set<int> greedySelect(vector<vector<float> > &sim, int K) {
         C.insert(min_improv_i);
         is_in_set[min_improv_i] = 1;
         for (int k = 0; k < N; k++) {
-            cur[k] = max(cur[k], max(sim[min_improv_i][k], sim[k][min_improv_i]));
+            cur[k] = max(cur[k], sim[k][min_improv_i]);
         }
         cerr << "i = " << i << " Min Improv: " << min_improvement << endl;
         cerr << "removed: " << min_improv_i << endl;
