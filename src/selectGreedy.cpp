@@ -12,7 +12,7 @@
 using namespace std;
 
 void help() {
-    cerr << "Usage: ./prog <sim file> <K> <output_file>" << endl;
+    cerr << "Usage: ./prog <sim file> <K> <output_file> <ignore_list_fpath (img indexes to ignore in training)>" << endl;
 }
 
 void print_set(set<int> C, string output_file) {
@@ -59,13 +59,15 @@ set<int> greedySelect(vector<vector<float> > &sim, int K) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 4) {
+    if (argc < 5) {
         help();
         return -1;
     }
     string simFile = argv[1];
     int K = stoi(argv[2]);
     vector<vector<float> > sim = readSimFile(simFile);
+    bool ignore[1000000];
+    readIgnoreList(argv[4], ignore);
     cout << "Read sims file " << endl;
     set<int> C = greedySelect(sim, K);
     print_set(C, argv[3]);

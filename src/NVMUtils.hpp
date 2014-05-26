@@ -97,3 +97,16 @@ readSimFile(string fname) {
     }
     return res;
 }
+
+void readIgnoreList(string fname, bool res[]) {
+    ifstream fin(fname.c_str());
+    if (!fin.is_open()) {
+        return;
+    }
+    string line;
+    while (getline(fin, line)) {
+        res[stoi(line)] = true;
+    }
+    fin.close();
+}
+
