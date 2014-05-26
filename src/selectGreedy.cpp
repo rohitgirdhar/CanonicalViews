@@ -23,7 +23,7 @@ void print_set(set<int> C, string output_file) {
     fout.close();
 }
 
-set<int> greedySelect(vector<vector<float> > &sim, int K) {
+set<int> greedySelect(vector<vector<float> > &sim, int K, bool ignore[]) {
     int N = sim.size();
     vector<float> cur(N, 0.0f);
     set<int> C;
@@ -33,6 +33,7 @@ set<int> greedySelect(vector<vector<float> > &sim, int K) {
     for (int i = 0; i < K; i++) {
         max_improvement = 0.0f;
         for (int j = 0; j < N; j++) {
+            if (ignore[j]) continue;
             if (C.count(j)) continue;
             float improv = 0;
             for (int k = 0; k < N; k++) {
@@ -66,10 +67,10 @@ int main(int argc, char *argv[]) {
     string simFile = argv[1];
     int K = stoi(argv[2]);
     vector<vector<float> > sim = readSimFile(simFile);
-    bool ignore[1000000];
-    readIgnoreList(argv[4], ignore);
     cout << "Read sims file " << endl;
-    set<int> C = greedySelect(sim, K);
+    bool ignore[1000000] = {false};
+    readIgnoreList(argv[4], ignore);
+    set<int> C = greedySelect(sim, K, ignore);
     print_set(C, argv[3]);
     return 0;
 }

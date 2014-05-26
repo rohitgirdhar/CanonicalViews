@@ -5,6 +5,7 @@
 #include <string>
 #include <algorithm>
 #include <cmath>
+#include <sstream>
 
 using namespace std;
 
@@ -98,6 +99,9 @@ readSimFile(string fname) {
     return res;
 }
 
+/**
+ * Assumes res is already set to all false
+ */
 void readIgnoreList(string fname, bool res[]) {
     ifstream fin(fname.c_str());
     if (!fin.is_open()) {
