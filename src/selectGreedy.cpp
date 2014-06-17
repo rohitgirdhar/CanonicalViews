@@ -37,6 +37,7 @@ set<int> greedySelect(vector<vector<float> > &sim, int K, bool ignore[]) {
             if (C.count(j)) continue;
             float improv = 0;
             for (int k = 0; k < N; k++) {
+                if (ignore[k]) continue;
                 if (sim[j][k] - cur[k] > 0) {
                     improv += sim[j][k] - cur[k];
                 }
@@ -49,6 +50,7 @@ set<int> greedySelect(vector<vector<float> > &sim, int K, bool ignore[]) {
         if (max_improvement == 0) return C;
         C.insert(max_improv_i);
         for (int k = 0; k < N; k++) {
+            if (ignore[k]) continue;
             if (sim[max_improv_i][k] > cur[i]) {
                 cur[k] = sim[max_improv_i][k];
             }
